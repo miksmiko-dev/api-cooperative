@@ -14,7 +14,7 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  registr() {
+  registr(@Body) {
     return;
   }
 }

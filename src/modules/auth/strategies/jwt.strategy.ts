@@ -2,13 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { UsersService } from 'src/modules/users/services/users.service';
+import { MembersService } from 'src/modules/members/services/members.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     configService: ConfigService,
-    private usersService: UsersService,
+    private membersService: MembersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -17,13 +17,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: number) {
-    const user = await this.usersService.findOne(payload.id);
+  async validate(payload: any) {
+    const member = await this.membersService.findOne(payload.id);
 
-    if (!user) {
+    if (!member) {
       throw new UnauthorizedException();
     }
     // This return value is what will be available in req.user
-    return user;
+    return member;
   }
 }
