@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.modules';
-import { UsersModule } from './modules/users/users.module';
+import { MembersModule } from './modules/members/members.module';
 import appConfig from './config/app.config';
 import jwtConfig from './config/jwt.config';
 import swaggerConfig from './config/swagger.config';
@@ -17,7 +17,7 @@ import swaggerConfig from './config/swagger.config';
       load: [appConfig, jwtConfig, swaggerConfig],
       envFilePath: '.env',
     }),
-    UsersModule,
+    MembersModule,
     AuthModule,
     HealthModule,
     DatabaseModule,
