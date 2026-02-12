@@ -10,4 +10,3 @@ export class CreateMemberDto {
   @MinLength(6)
   password: string;
 }
-

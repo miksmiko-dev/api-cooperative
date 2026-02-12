@@ -1,28 +1,45 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthLoginDTO } from '../dto/auth-login.dto';
-import { MembersService } from 'src/modules/members/services/members.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Credential } from '../entities/credential.entity';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { HashService } from 'src/common/hash/hash.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private membersService: MembersService) {}
+  constructor(
+    @InjectRepository(Credential)
+    private readonly membersRepository: Repository<Credential>,
+    private readonly hashService: HashService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  async login(login: AuthLoginDTO) {
-    const member = await this.membersService.findByEmail(login.email);
-    
+  async login(value: AuthLoginDTO): Promise<any> {
+    const member = await this.membersRepository.findOne({
+      where: { email: value.email },
+    });
+
     // Check if member exists
-    if (!member) {
-      throw new UnauthorizedException('Invalid Credentials');
-    }
+    if (!member) throw new UnauthorizedException('Invalid Credential');
 
-    // TODO: Implement password comparison (e.g., bcrypt.compare(login.password, member.password))
-    if (member.password !== login.password) {
-       // Ideally you would hash passwords. For now, we assume plain text or implement hashing later.
-       // throw new UnauthorizedException('Invalid Credentials');
-    }
+    // const isPasswordMatch = await this.hashService.compare(
+    //   value.password,
+    //   member.password,
+    // );
+    // if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
 
     return {
-      status: 'success',
-      // token: ... (You will need to sign the JWT here)
+      ...member,
+      token: this.jwtService.sign({
+        id: member.id,
+        account_id: member.account_id,
+        email: member.email,
+      }),
     };
+  }
+  registration() {
+    return 'test';
   }
 }

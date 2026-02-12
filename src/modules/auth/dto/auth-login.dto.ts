@@ -13,7 +13,7 @@ export class AuthLoginDTO {
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(7)
-  @MaxLength(12)
+  // @MinLength(7)
+  // @MaxLength(12)
   password: string;
 }

@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMemberDto } from '../dto/create-member.dto';
 import { UpdateMemberDto } from '../dto/update-member.dto';
-import { Member } from '../entities/member.entity';
+import { Members } from '../entities/member.entity';
 
 @Injectable()
 export class MembersService {
   constructor(
-    @InjectRepository(Member)
-    private membersRepository: Repository<Member>,
+    @InjectRepository(Members)
+    private membersRepository: Repository<Members>,
   ) {}
 
   create(createMemberDto: CreateMemberDto) {
@@ -20,12 +20,12 @@ export class MembersService {
     return `This action returns all members`;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} member`;
-  }
-
-  async findByEmail(email: string) {
-    return this.membersRepository.findOne({ where: { email } });
+  async findOne(id: number): Promise<Members> {
+    const member = await this.membersRepository.findOne({ where: { id } });
+    if (!member) {
+      throw new NotFoundException(`Member with ID ${id} not found`);
+    }
+    return member;
   }
 
   update(id: number, updateMemberDto: UpdateMemberDto) {
@@ -36,4 +36,3 @@ export class MembersService {
     return `This action removes a #${id} member`;
   }
 }
-
