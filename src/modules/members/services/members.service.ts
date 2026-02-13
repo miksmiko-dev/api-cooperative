@@ -1,35 +1,41 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Put } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateMemberDto } from '../dto/create-member.dto';
-import { UpdateMemberDto } from '../dto/update-member.dto';
-import { Members } from '../entities/member.entity';
+import { Member } from '../entities/member.entity';
 
 @Injectable()
 export class MembersService {
   constructor(
-    @InjectRepository(Members)
-    private membersRepository: Repository<Members>,
+    @InjectRepository(Member)
+    private membersRepository: Repository<Member>,
   ) {}
 
-  create(createMemberDto: CreateMemberDto) {
-    return 'This action adds a new member';
+  async findAll(): Promise<Member[]> {
+    const allMember = await this.membersRepository.find();
+    return allMember;
   }
 
-  findAll() {
-    return `This action returns all members`;
-  }
-
-  async findOne(id: number): Promise<Members> {
-    const member = await this.membersRepository.findOne({ where: { id } });
+  async findOne(account_id: string): Promise<Member> {
+    const member = await this.membersRepository.findOne({
+      where: { account_id },
+    });
     if (!member) {
-      throw new NotFoundException(`Member with ID ${id} not found`);
+      throw new NotFoundException(`Member with ID ${account_id} not found`);
     }
     return member;
   }
 
-  update(id: number, updateMemberDto: UpdateMemberDto) {
-    return `This action updates a #${id} member`;
+  async update(account_id: string, val): Promise<Member | null> {
+    const checkAccountId = await this.membersRepository.findOne({
+      where: { account_id },
+    });
+    if (!checkAccountId) {
+      throw new NotFoundException();
+    }
+    await this.membersRepository.update({ account_id }, val);
+    return await this.membersRepository.findOne({
+      where: { account_id },
+    });
   }
 
   remove(id: number) {

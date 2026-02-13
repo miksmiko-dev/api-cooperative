@@ -6,33 +6,30 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { MembersService } from '../services/members.service';
-import { CreateMemberDto } from '../dto/create-member.dto';
-import { UpdateMemberDto } from '../dto/update-member.dto';
+import { MemberDto } from '../dto/create-member.dto';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 
-@Controller('members')
+@Controller('member')
+@UseGuards(JwtAuthGuard)
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
-  @Post()
-  create(@Body() createMemberDto: CreateMemberDto) {
-    return this.membersService.create(createMemberDto);
-  }
-
-  @Get()
-  findAll() {
+  @Get('getAllMembers')
+  getProfiles() {
     return this.membersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.membersService.findOne(+id);
+  @Get('profile/:account_id')
+  getProfile(@Param('account_id') account_id: string) {
+    return this.membersService.findOne(account_id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
-    return this.membersService.update(+id, updateMemberDto);
+  @Patch('profile/:account_id')
+  update(@Param('account_id') account_id: string, @Body() val: MemberDto) {
+    return this.membersService.update(account_id, val);
   }
 
   @Delete(':id')
@@ -40,4 +37,3 @@ export class MembersController {
     return this.membersService.remove(+id);
   }
 }
-

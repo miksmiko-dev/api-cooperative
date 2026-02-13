@@ -5,14 +5,14 @@ import { MembersModule } from '../members/members.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Credential } from './entities/credential.entity';
+import { Member } from '../members/entities/member.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Credential]),
+    TypeOrmModule.forFeature([Credential, Member]),
     MembersModule,
     PassportModule,
     JwtModule.registerAsync({

@@ -1,12 +1,37 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsStrongPassword,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
-export class CreateMemberDto {
+export class MemberDto {
+  @IsNotEmpty()
+  @IsString()
+  first_name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  last_name: string;
+
+  // @IsNumber()
+  @IsNotEmpty()
+  sex: number;
+
+  @IsNotEmpty()
+  // @IsDate()
+  birth_date: Date;
+
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  username: string;
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(6)
+  @IsStrongPassword()
   password: string;
 }

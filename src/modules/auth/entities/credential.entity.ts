@@ -22,6 +22,7 @@ export class Credential {
   @Column({ unique: true })
   email: string;
 
+  @Column()
   @Exclude()
   password: string;
 

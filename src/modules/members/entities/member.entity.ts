@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity('members')
-export class Members {
+export class Member {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,7 +25,7 @@ export class Members {
   birth_date: Date;
 
   @Column({ type: 'smallint' })
-  sex: Sex;
+  sex: number;
 
   @CreateDateColumn({ type: 'datetime' })
   date_created: Date;
