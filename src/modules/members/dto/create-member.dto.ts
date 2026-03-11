@@ -1,13 +1,13 @@
+import { Type } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsStrongPassword,
-  MaxLength,
-  MinLength,
 } from 'class-validator';
+import { Sex } from 'src/common/constants/sex.enum';
 
 export class MemberDto {
   @IsNotEmpty()
@@ -18,17 +18,18 @@ export class MemberDto {
   @IsString()
   last_name: string;
 
-  // @IsNumber()
+  @IsEnum(Sex) // or number
   @IsNotEmpty()
   sex: number;
 
+  @IsDate()
   @IsNotEmpty()
-  // @IsDate()
+  @Type(() => Date)
   birth_date: Date;
 
   @IsEmail()
   @IsNotEmpty()
-  username: string;
+  email: string;
 
   @IsString()
   @IsNotEmpty()

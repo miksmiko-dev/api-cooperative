@@ -1,6 +1,5 @@
 import {
   Injectable,
-  NotFoundException,
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -8,10 +7,10 @@ import { AuthLoginDTO } from '../dto/auth-login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Credential } from '../entities/credential.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+// import * as bcrypt from 'bcrypt';
 import { HashService } from 'src/common/hash/hash.service';
 import { JwtService } from '@nestjs/jwt';
-import { AuthRegisterDTO } from '../dto/register.dto';
+// import { AuthRegisterDTO } from '../dto/register.dto';
 import { randomUUID } from 'crypto';
 import { Member } from 'src/modules/members/entities/member.entity';
 import { MemberDto } from 'src/modules/members/dto';
@@ -31,6 +30,7 @@ export class AuthService {
   ) {}
 
   async login(value: AuthLoginDTO): Promise<any> {
+    console.log(value);
     const member = await this.credentialRepository.findOne({
       where: { email: value.email },
     });
@@ -38,11 +38,11 @@ export class AuthService {
     // Check if member exists
     if (!member) throw new UnauthorizedException('Invalid Credential');
 
-    // const isPasswordMatch = await this.hashService.compare(
-    //   value.password,
-    //   member.password,
-    // );
-    // if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
+    const isPasswordMatch = await this.hashService.compare(
+      value.password,
+      member.password,
+    );
+    if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
 
     return {
       ...member,
@@ -53,10 +53,11 @@ export class AuthService {
       }),
     };
   }
+
   async registration(val: MemberDto) {
-    const { username, password } = val;
+    const { email, password } = val;
     const checkEmail = await this.credentialRepository.findOne({
-      where: { email: username },
+      where: { email },
     });
     if (checkEmail) {
       throw new ConflictException('Email already exist');
@@ -74,10 +75,10 @@ export class AuthService {
     });
 
     const insertCrendetial = this.credentialRepository.create({
-      email: val.username,
+      email: val.email,
       password: await this.hashService.hash(password),
       account_id,
-      account_type: Role.MEMBER,
+      account_type: Role.ADMIN,
     });
     await this.memberRepository.save(insertMember);
     await this.credentialRepository.save(insertCrendetial);
