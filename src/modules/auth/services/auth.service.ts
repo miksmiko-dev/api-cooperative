@@ -50,6 +50,7 @@ export class AuthService {
         id: member.id,
         account_id: member.account_id,
         email: member.email,
+        account_type: member.account_type,
       }),
     };
   }

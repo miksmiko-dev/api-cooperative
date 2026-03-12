@@ -26,8 +26,8 @@ export class Credential {
   @Exclude()
   password: string;
 
-  @Column({ default: 0 })
-  is_active: boolean;
+  @Column({ type: 'smallint', default: 0 })
+  is_active: number;
 
   @CreateDateColumn({ type: 'datetime' })
   date_created: Date;

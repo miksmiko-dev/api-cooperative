@@ -6,7 +6,7 @@ import { ROLES_KEY } from '../decorators/role.decorator';
 interface RequestWithUser extends Request {
   user: {
     id: string;
-    admin_type: Role;
+    account_type: Role;
   };
 }
 
@@ -24,7 +24,6 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const { user } = request;
-    console.log(user);
-    return requiredRoles.includes(user.admin_type);
+    return requiredRoles.includes(user.account_type);
   }
 }

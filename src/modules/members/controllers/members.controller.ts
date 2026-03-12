@@ -5,17 +5,15 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { MembersService } from '../services/members.service';
-import { MemberDto } from '../dto/create-member.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Role } from 'src/common/constants/roles.enum';
 import { Roles } from 'src/common/decorators/role.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { UpdateMemberDto } from '../dto';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 
 @Controller('member')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -24,7 +22,7 @@ export class MembersController {
 
   @Roles(Role.ADMIN)
   @Get('fetchMembers')
-  fetchMembers(@CurrentUser()) {
+  fetchMembers() {
     return this.membersService.findAll();
   }
 
@@ -34,12 +32,15 @@ export class MembersController {
   }
 
   @Patch('profile/:account_id')
-  update(@Param('account_id') account_id: string, @Body() val: UpdateMemberDto) {
+  update(
+    @Param('account_id') account_id: string,
+    @Body() val: UpdateMemberDto,
+  ) {
     return this.membersService.update(account_id, val);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.membersService.remove(+id);
+  @Patch('/deactivate/:account_id')
+  remove(@Param('account_id') account_id: string) {
+    return this.membersService.remove(account_id);
   }
 }

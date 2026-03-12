@@ -1,4 +1,3 @@
-import { Sex } from 'src/common/constants/sex.enum';
 import {
   Column,
   CreateDateColumn,
@@ -26,6 +25,9 @@ export class Member {
 
   @Column({ type: 'smallint' })
   sex: number;
+
+  @Column({ type: 'smallint', default: 0 })
+  is_active: number;
 
   @CreateDateColumn({ type: 'datetime' })
   date_created: Date;

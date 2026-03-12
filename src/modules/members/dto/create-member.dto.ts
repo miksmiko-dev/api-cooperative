@@ -2,23 +2,24 @@ import { Type } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsString,
   IsStrongPassword,
+  Matches,
 } from 'class-validator';
-import { Sex } from 'src/common/constants/sex.enum';
 
 export class MemberDto {
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'first name must contain letters only' })
   first_name: string;
 
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'last name must contain letters only' })
   last_name: string;
 
-  @IsEnum(Sex) // or number
+  @Type(() => Number)
   @IsNotEmpty()
   sex: number;
 
