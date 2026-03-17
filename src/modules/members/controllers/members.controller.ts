@@ -10,17 +10,14 @@ import {
 import { MembersService } from '../services/members.service';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Role } from 'src/common/constants/roles.enum';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { UpdateMemberDto } from '../dto';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { MemberDto } from '../dto';
 
 @Controller('member')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
-  @Roles(Role.ADMIN)
+  // @Roles(Role.ADMIN)
   @Get('fetchMembers')
   fetchMembers() {
     return this.membersService.findAll();
@@ -32,10 +29,7 @@ export class MembersController {
   }
 
   @Patch('profile/:account_id')
-  update(
-    @Param('account_id') account_id: string,
-    @Body() val: UpdateMemberDto,
-  ) {
+  update(@Param('account_id') account_id: string, @Body() val: MemberDto) {
     return this.membersService.update(account_id, val);
   }
 

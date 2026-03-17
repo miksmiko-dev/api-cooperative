@@ -1,8 +1,8 @@
 import { Type } from 'class-transformer';
 import {
-  IsDate,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsString,
   IsStrongPassword,
   Matches,
@@ -23,7 +23,6 @@ export class MemberDto {
   @IsNotEmpty()
   sex: number;
 
-  @IsDate()
   @IsNotEmpty()
   @Type(() => Date)
   birth_date: Date;
@@ -32,8 +31,24 @@ export class MemberDto {
   @IsNotEmpty()
   email: string;
 
-  @IsString()
   @IsNotEmpty()
-  @IsStrongPassword()
-  password: string;
+  @IsString()
+  region_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  province_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  city_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  barangay_id: string;
+
+  // @IsString()
+  // @IsNotEmpty()
+  // @IsStrongPassword()
+  // password: string;
 }
