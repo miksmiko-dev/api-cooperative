@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './health/health.module';
 import { DatabaseModule } from './database/database.modules';
 import { MembersModule } from './modules/members/members.module';
+import { TransactionModule } from './modules/transactions/transactions.module';
 import { HashModule } from './common/hash/hash.module';
 import appConfig from './config/app.config';
 import jwtConfig from './config/jwt.config';
@@ -19,6 +20,7 @@ import swaggerConfig from './config/swagger.config';
       envFilePath: '.env',
     }),
     MembersModule,
+    TransactionModule,
     AuthModule,
     HashModule,
     HealthModule,
